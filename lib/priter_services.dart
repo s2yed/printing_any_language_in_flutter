@@ -3,7 +3,8 @@
 import 'dart:developer';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
-import 'package:esc_pos_printer/esc_pos_printer.dart';
+ // import 'package:esc_pos_printer/esc_pos_printer.dart';
+// import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -13,16 +14,77 @@ import 'package:printer/printer_widgets.dart';
 
 GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
 
-printTest(String ip) async {
-  log('printTest');
-  try {
+// printTest(String ip) async {
+//   log('printTest');
+//   try {
+//     const PaperSize paper = PaperSize.mm80;
+//     final profile = await CapabilityProfile.load();
+//     final printerService = NetworkPrinter(paper, profile);
+//     log('connecting');
+//     final PosPrintResult res = await printerService.connect(ip, port: 9100);
+//     if (res == PosPrintResult.success) {
+//       log('connected');
+//       Uint8List? companyNameAs8List = await createImageFromWidget(
+//           Column(
+//             mainAxisSize: MainAxisSize.min,
+//             children: [
+//               compnayName(),
+//               branchName(),
+//               vatNo(),
+//               cashierNameAndPostingDate(),
+//               invoiceStatusAndOrderType(),
+//               orderNo(),
+//             ],
+//           ),
+//           logicalSize: const Size(500, 500),
+//           imageSize: const Size(680, 680));
+//       final AnotherImage.Image companyNameImage = AnotherImage.decodeImage(companyNameAs8List!)!;
+//       // table header
+//       Uint8List? tableHeaderAs8List = await createImageFromWidget(tableHeader(), logicalSize: const Size(500, 500), imageSize: const Size(680, 680));
+//       final AnotherImage.Image tableHeaderImage = AnotherImage.decodeImage(tableHeaderAs8List!)!;
+//       // divider
+//       Uint8List? dividerAs8List = await createImageFromWidget(divider(), logicalSize: const Size(500, 500), imageSize: const Size(680, 680));
+//       final AnotherImage.Image dividerImage = AnotherImage.decodeImage(dividerAs8List!)!;
+//       // table item row
+//       Uint8List? tableItemRowAs8List = await createImageFromWidget(tableItemRow(), logicalSize: const Size(500, 500), imageSize: const Size(680, 680));
+//       final AnotherImage.Image tableItemRowImage = AnotherImage.decodeImage(tableItemRowAs8List!)!;
+//       // table footer
+//       Uint8List? tableFooterRowAs8List = await createImageFromWidget(tableFotter(), logicalSize: const Size(500, 500), imageSize: const Size(680, 680));
+//       final AnotherImage.Image tableFooterImage = AnotherImage.decodeImage(tableFooterRowAs8List!)!;
+//       // invoice ref & print time
+//       Uint8List? invoiceRefAndPrintTimeAs8List =
+//           await createImageFromWidget(referenceNoAndPrintTime(), logicalSize: const Size(500, 500), imageSize: const Size(680, 680));
+//       final AnotherImage.Image invoiceRefAndPrintTimerImage = AnotherImage.decodeImage(invoiceRefAndPrintTimeAs8List!)!;
+//
+//       printerService.image(companyNameImage);
+//       printerService.image(tableHeaderImage);
+//       printerService.image(dividerImage);
+//       printerService.image(tableItemRowImage);
+//       printerService.image(tableItemRowImage);
+//       printerService.image(tableItemRowImage);
+//       printerService.image(dividerImage);
+//       printerService.image(tableFooterImage);
+//       printerService.emptyLines(3);
+//       printerService.image(invoiceRefAndPrintTimerImage);
+//       printerService.feed(1);
+//       printerService.cut();
+//       printerService.disconnect();
+//     }
+//     log('res value: ${res.value}');
+//     log('res msg: ${res.msg}');
+//   } catch (e, stackTrace) {
+//     log(e.toString(), stackTrace: stackTrace);
+//   }
+// }
+
+
+Future<List<int>> printTestBluetooth( ) async {
     const PaperSize paper = PaperSize.mm80;
+
     final profile = await CapabilityProfile.load();
-    final printerService = NetworkPrinter(paper, profile);
-    log('connecting');
-    final PosPrintResult res = await printerService.connect(ip, port: 9100);
-    if (res == PosPrintResult.success) {
-      log('connected');
+    final Generator generator = Generator(paper, profile);
+    List<int> bytes = [];
+
       Uint8List? companyNameAs8List = await createImageFromWidget(
           Column(
             mainAxisSize: MainAxisSize.min,
@@ -35,46 +97,49 @@ printTest(String ip) async {
               orderNo(),
             ],
           ),
-          logicalSize: Size(500, 500),
-          imageSize: Size(680, 680));
+          logicalSize: const Size(500, 500),
+          imageSize: const Size(680, 680));
+
       final AnotherImage.Image companyNameImage = AnotherImage.decodeImage(companyNameAs8List!)!;
+
       // table header
-      Uint8List? tableHeaderAs8List = await createImageFromWidget(tableHeader(), logicalSize: Size(500, 500), imageSize: Size(680, 680));
+      Uint8List? tableHeaderAs8List = await createImageFromWidget(tableHeader(),
+          logicalSize: const Size(500, 500), imageSize: const Size(680, 680));
+
       final AnotherImage.Image tableHeaderImage = AnotherImage.decodeImage(tableHeaderAs8List!)!;
       // divider
-      Uint8List? dividerAs8List = await createImageFromWidget(divider(), logicalSize: Size(500, 500), imageSize: Size(680, 680));
+      Uint8List? dividerAs8List = await createImageFromWidget(divider(),
+          logicalSize: const Size(500, 500), imageSize: const Size(680, 680));
+
       final AnotherImage.Image dividerImage = AnotherImage.decodeImage(dividerAs8List!)!;
       // table item row
-      Uint8List? tableItemRowAs8List = await createImageFromWidget(tableItemRow(), logicalSize: Size(500, 500), imageSize: Size(680, 680));
+      Uint8List? tableItemRowAs8List = await createImageFromWidget(tableItemRow(),
+          logicalSize: const Size(500, 500), imageSize: const Size(680, 680));
+
       final AnotherImage.Image tableItemRowImage = AnotherImage.decodeImage(tableItemRowAs8List!)!;
       // table footer
-      Uint8List? tableFooterRowAs8List = await createImageFromWidget(tableFotter(), logicalSize: Size(500, 500), imageSize: Size(680, 680));
+      Uint8List? tableFooterRowAs8List = await createImageFromWidget(tableFotter(),
+          logicalSize: const Size(500, 500), imageSize: const Size(680, 680));
       final AnotherImage.Image tableFooterImage = AnotherImage.decodeImage(tableFooterRowAs8List!)!;
       // invoice ref & print time
       Uint8List? invoiceRefAndPrintTimeAs8List =
-          await createImageFromWidget(referenceNoAndPrintTime(), logicalSize: Size(500, 500), imageSize: Size(680, 680));
+      await createImageFromWidget(referenceNoAndPrintTime(), logicalSize: const Size(500, 500), imageSize: const Size(680, 680));
       final AnotherImage.Image invoiceRefAndPrintTimerImage = AnotherImage.decodeImage(invoiceRefAndPrintTimeAs8List!)!;
 
-      printerService.image(companyNameImage);
-      printerService.image(tableHeaderImage);
-      printerService.image(dividerImage);
-      printerService.image(tableItemRowImage);
-      printerService.image(tableItemRowImage);
-      printerService.image(tableItemRowImage);
-      printerService.image(dividerImage);
-      printerService.image(tableFooterImage);
-      printerService.emptyLines(3);
-      printerService.image(invoiceRefAndPrintTimerImage);
-      printerService.feed(1);
-      printerService.cut();
-      printerService.disconnect();
-    }
-    log('res value: ${res.value}');
-    log('res msg: ${res.msg}');
-  } catch (e, stackTrace) {
-    log(e.toString(), stackTrace: stackTrace);
+      bytes +=  generator.image(companyNameImage);
+      bytes +=  generator.image(tableHeaderImage);
+      bytes +=  generator.image(dividerImage);
+      bytes +=  generator.image(tableItemRowImage);
+      bytes +=  generator.image(tableItemRowImage);
+      bytes +=  generator.image(tableItemRowImage);
+      bytes +=  generator.image(dividerImage);
+      bytes +=  generator.image(tableFooterImage);
+      bytes +=  generator.emptyLines(3);
+      bytes +=  generator.image(invoiceRefAndPrintTimerImage);
+      bytes +=  generator.feed(1);
+      bytes +=  generator.cut();
+      return bytes;
   }
-}
 
 Future<Uint8List?> createImageFromWidget(Widget widget, {Duration? wait, Size? logicalSize, Size? imageSize}) async {
 
